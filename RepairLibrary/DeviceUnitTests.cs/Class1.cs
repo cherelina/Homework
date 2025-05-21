@@ -44,7 +44,7 @@ namespace DeviceUnitTests
                     RepairCost = 0.00m,
                     TechnicianFullName = "Иванов Иван Иванович"
                 };
-                return device;
+                return device; 
 
             }
         }
