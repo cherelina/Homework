@@ -40,7 +40,7 @@ namespace DeviceUnitTests
             {
                 var device = new Device("Washing Machine", "LG", "LG123456789", RepairType.Warranty)
                 {
-                    FaultDescription = "Не включается",
+                    FaultDescription = "Не включается", 
                     RepairCost = 0.00m,
                     TechnicianFullName = "Иванов Иван Иванович"
                 };
