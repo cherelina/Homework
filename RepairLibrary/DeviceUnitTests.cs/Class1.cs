@@ -101,7 +101,83 @@ namespace DeviceUnitTests
             Assert.That(info[2], Is.EqualTo("Холодильник: 2 камер. Размеры: 200x60x65 см."));
         }
     }
+    [TestFixture]
+    public class DeviceTests
+    {
+        [Test]
+        public void CompareTo_ByTechnicianSurname_ThenByName()
+        {
+            var d1 = new Device("Телевизор", "LG", "123", RepairType.Paid)
+            {
+                TechnicianFullName = "Иванов Алексей"
+            };
+
+            var d2 = new Device("Холодильник", "Samsung", "456", RepairType.Paid)
+            {
+                TechnicianFullName = "Петров Иван"
+            };
+
+            var d3 = new Device("Аудиосистема", "Sony", "789", RepairType.Paid)
+            {
+                TechnicianFullName = "Иванов Сергей"
+            };
+
+            Assert.That(d1.CompareTo(d2), Is.LessThan(0)); 
+            Assert.That(d2.CompareTo(d1), Is.GreaterThan(0));
+            Assert.That(d1.CompareTo(d3), Is.GreaterThan(0)); 
+        }
+    }
+    [TestFixture]
+    public class RepairServiceTests
+    {
+        RepairService service;
+        Device[] devices;
+
+        [SetUp]
+        public void Setup()
+        {
+            service = new RepairService("РемБытТех", "ул. Техническая, д.5", "8 (800) 555-35-35");
+
+            devices = new[]
+            {
+                new Device("Телевизор", "LG", "123", RepairType.Paid) { TechnicianFullName = "Иванов Алексей" },
+                new Device("Холодильник", "Samsung", "456", RepairType.Warranty) { TechnicianFullName = "Петров Иван" },
+                new Device("Стиральная машина", "Bosch", "789", RepairType.Paid) { TechnicianFullName = "Сидоров Павел" }
+            };
+
+            foreach (var d in devices)
+                service.AddDevice(d);
+        }
+
+        [Test]
+        public void AddDevice_DeviceAddedToService()
+        {
+            Assert.That(service.Count(), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void RemoveDevice_DeviceRemovedFromService()
+        {
+            service.RemoveDevice(devices[1]); 
+            Assert.That(service.Count(), Is.EqualTo(2));
+            Assert.That(service.Contains(devices[2]), Is.True);
+        }
+
+        [Test]
+        public void IEnumerableImplementation_ForeachWorks()
+        {
+            int count = 0;
+            foreach (var d in service)
+            {
+                Assert.That(d, Is.InstanceOf<Device>());
+                count++;
+            }
+            Assert.That(count, Is.EqualTo(3));
+        }
+    }
 }
+
+
 
 
 
